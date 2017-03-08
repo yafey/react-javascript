@@ -1,0 +1,10 @@
+@value colors: "./colors.css";
+@value blue1, red1, green1 from colors;
+
+.h1 {
+  color:red;
+}
+
+:global(.h2) {
+  color: blue;
+}

@@ -1,0 +1,1 @@
+document.write('<h1>3rd plugin for HTML Webpack Plugin</h1>');

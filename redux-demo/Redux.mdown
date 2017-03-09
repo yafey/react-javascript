@@ -1,0 +1,133 @@
+
+> RuanYF
+## Redux是什么?
+
+Redux 的适用场景：多交互、多数据源
+Redux是一个web应用框架，状态管理工具
+
+## Redux设计思想
+把所有状态保存在一个对象里面，一个状态对应一个视图，反过来也是。
+
+
+## Redux基本概念 & API
+
+1. store
+    
+   store用来保存所有的数据，一个应用只有一个store
+
+   创建方式:
+   ```
+   import {createStore} from 'redux'
+   const store = createStore(fn);
+   ```
+
+2. state
+
+    状态，某一个时刻的数据集就是state,如何获取state?
+
+    ```
+    import {createStore} from 'redux'
+    const store = createStore(fn);
+
+    const state = store.getState();
+    ```
+
+3. action
+
+    按照redux设计思想，state变化，用户看到的视图就应该变化。
+    但是用户是接触不到state的，如何通知state应该变化呢?
+    action就是做这个的，action是一个对象，可以在视图和store建立联系，
+    运送数据给state
+
+    ```
+    const action = {
+        type:'ADD_TODO' //type是必须有的，相当于action的name
+        ...
+    }
+    ```
+    
+ action可以通过函数生成
+
+    ```
+    const ADD_TODO = '添加 TODO';
+
+    function addTodo(text) {
+      return {
+        type: ADD_TODO,
+        text
+      }
+    }
+
+    const action = addTodo('Learn Redux');
+    ```
+
+4. 发送action
+   
+   视图发送action的唯一方法是:store.dispatch(action);
+
+5. reducer
+
+   store收到action后，重新生成新的state的过程就是reducer.
+   Reducer 是一个函数，它接受 Action 和当前 State 作为参数，返回一个新的 State
+   reducer函数一般直接写在creaStore(reducer);不用每次都要自己去reducer,
+   reducer可以接收action数组参数,它是一个纯函数，函数式编程中的纯函数概念，
+   也就是说，只要是同样的输入，必定得到同样的输出。从而保证了state和view的绝对唯一对应。
+   ```
+   const reducer = function (state, action) {
+      // ...
+      return new_state;
+    };
+   ```
+
+6. 监听
+   监听函数，一旦 State 发生变化，就自动执行这个函数。
+   let a = store.subscribe(listener);
+   store.subscribe方法返回一个函数，调用这个函数就可以解除监听。
+   a();
+
+   技巧: 显然把react组件的render和setState();放在listen,就可以实现state改变，
+         组件就立刻刷新。
+
+7. reducer的拆分合并
+
+   react是组件化的，reducer也可以拆分成多个reducer，与每一个组件对应。最后通过combineReducers()；
+   合并为一个大的reducer。
+   ```
+   const chatReducer = (state = defaultState, action = {}) => {
+      return {
+        chatLog: chatLog(state.chatLog, action),
+        statusMessage: statusMessage(state.statusMessage, action),
+        userName: userName(state.userName, action)
+      }
+    };
+   ```
+
+   ```
+   import { combineReducers } from 'redux';
+
+    const chatReducer = combineReducers({
+      chatLog,
+      statusMessage,
+      userName
+    })
+
+   ```
+
+
+8. redux工作流程
+
+   1> 用户发action  store.dispatch(action);
+
+   2> Store 自动调用 Reducer，并且传入两个参数：
+      当前 State 和收到的Action。Reducer 会返回新的 State 。
+      let nextState = todoApp(previousState, action);
+   3> Store 就会调用监听函数store.subscribe(listener);
+   4> listener可以通过store.getState()得到当前状态,重新渲染
+   ```
+   function listerner() {
+      let newState = store.getState();
+      component.setState(newState);   
+    }
+   ```
+
+9.demo1 见件 redux-demo1

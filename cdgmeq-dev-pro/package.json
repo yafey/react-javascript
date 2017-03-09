@@ -1,0 +1,11 @@
+{
+  "name": "cdgmeq-dev-pro",
+  "version": "1.0.0",
+  "description": "a repo with react-router-webpack-redux",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "huang",
+  "license": "MIT"
+}

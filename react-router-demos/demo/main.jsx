@@ -51,7 +51,7 @@ ReactDOM.render(
 );*/
 
 // router实现
-import { Router, Route, Link,hashHistory } from 'react-router'
+import { Router, Route, Link,hashHistory,browserHistory } from 'react-router'
 import { IndexRoute,Redirect } from 'react-router'
 
 class App extends React.Component{
@@ -121,6 +121,9 @@ ReactDOM.render(
 	5. 获取参数  this.props.params.id  或者 this.props.location.query.id
 	6. IndexRoute 设置默认页面
 	7. 绝对路径+重定向
+	   Link:
+	       activeStyle()
+	       activeClassName()
 	8. Hook(页面跳转的钩子) 这些hook会在页面跳转确认时触发一次。
 	   使用场景:例如权限验证或者在路由跳转前将一些数据持久化保存起来.
 	   onenter:会从最外层的父路由开始直到最下层子路由结束。
@@ -130,7 +133,8 @@ ReactDOM.render(
 		        <Route path="/msg/:id" component={Msg} onEnter={({params},replace)=>{
 					replace(`msg/:${params.id}`)
 				}}/>
-    9. 路径匹配原则（类似正则匹配）
+    9. 路径匹配原则（类似正则匹配） path属性也可以使用相对路径（不以/开头），匹配时就会相对于父组件的路径
+       注意，路由之间自上而下执行，路径一样的话，第一个执行，后边的都被忽略。
         demo:
             <Route path="/hello/:name">         // 匹配 /hello/michael 和 /hello/ryan
             <Route path="/hello(/:name)">       // 匹配 /hello, /hello/michael 和 /hello/ryan
@@ -149,6 +153,9 @@ ReactDOM.render(
                hashHistory(可以看见hash值)
                createMemoryHistory
         historyAPI:
+               browserHistory.push
+
+               
                pushState(state, pathname, query)
                replaceState(state, pathname, query)
                goBack()...
@@ -217,4 +224,50 @@ ReactDOM.render(
         this.context.router.push() 可以跳转页面
         ....
     15. Double Serve 配置(webpack-dev-server & nodejs express)
+
+
+
+
+    了解底层实现：
+
+	1.简单说明Route的作用：
+    
+	用户可以通过手动输入或者与页面进行交互来改变 URL，
+	然后通过同步或者异步的方式向服务端发送请求获取资源（当然，资源也可能存在于本地），
+	成功后重新绘制 UI
+
+	2. 工作机制:
+
+	react-router是基于react架构的，所以说它也应该是可以传递一个props,含有一个state，render一个结果。
+	对应起来看，location就是其state,render的结果就是资源路径对应的组件。
+
+	>>>>>>再深入
+
+	当你点击Link to一个路径的时候，其实router底层的代码还是把Link的to,query,hash属性合并转成了<a href="">实现连接的。
+    然后createLocation(); 建立Listen(history);调用底层history.pushState();
+    现在再回过头来看看我们的demo，发觉你离router原理又近了一步。
+
+
+    location是什么?
+	location = {
+		  pathname, // 当前路径，即 Link 中的 to 属性
+		  search, // search
+		  hash, // 路由系统会将所有的路由信息都保存到 location.hash 中 
+		  state, // state 对象
+		  action, // location 类型，在点击 Link 时为 PUSH，浏览器前进后退时为 POP，调用 replaceState 方法时为 REPLACE
+		  key, // 用于操作 sessionStorage 存取 state 对象
+		  query
+        }
+
+    props是什么?
+
+    props={
+		children:"",
+		location:,
+		params:,
+		route:,
+		routeParams:,
+		router:,
+		routes:
+    }
 */

@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>oop demo</title>
+</head>
+<body>
+	
+</body>
+<script src="jquery-1.8.3.js"></script>
+<script type="text/javascript">
+/*
+  面向对象的三大铁打不死的特点:
+      1. 封装
+      2. 继承
+      3. 多态
+
+  javascript实现面向对象编程，从而更加容易实现现阶段流行的前端MVC思想。
+  基于我们的自己的项目，MVC模型:
+                            M-Model层(Redux)-->数据交互与流转
+                            V-UI视图层（React）-->组件化开发单页应用
+                            C-Controller器(Router)-->监听hashchange,分发请求资源，与请求
+*/
+
+//es5实现组件编写
+
+//定义一个父类
+function Component(width,height){
+	//初始化成员变量
+	this.width = width || 50;
+	this.height = height || 50;
+	this.$ele = null;
+}
+//定义父类的render方法
+Component.prototype.render = function($where){
+	if(this.$ele){
+		this.$ele.css({
+			width : this.width + "px",
+			height: this.height + "px",
+			backgroundColor : '#e8e8e8'
+		}).appendTo($where)
+	}
+}
+
+//子类 Button控件
+function Button(width,height,label){
+	//super(构造器);
+	Component.call(this,width,height);
+	this.label = label || "this is a button";
+	this.$ele = $("<button>").text(this.label);
+}
+// 原型继承
+Button.prototype = Object.create(Component.prototype);
+
+// OverWrite
+Button.prototype.render = function($where){
+	//super(方法)
+	Component.prototype.render.call(this,$where);
+	this.$ele.click(this.onClick.bind(this));
+}
+
+Button.prototype.onClick = function(){
+	alert("oh oop!")
+}
+
+$(document).ready(function(){
+	var $body = $(document.body);
+	var btn1 = new Button(125,30,"button1");
+	var btn2 = new Button(125,30,"button2");
+	btn1.render($body);
+	btn2.render($body);
+})
+
+
+
+
+
+
+
+
+
+//es6实现组件编写
+class Component{
+	constructor(width,height) {
+		this.width = width || 50;
+		this.height = height || 50;
+		this.$ele = null;		
+	}
+	render($where){
+		if(this.$ele){
+		this.$ele.css({
+			width : this.width + "px",
+			height: this.height + "px",
+			backgroundColor : '#e8e8e8'
+		}).appendTo($where)
+	  }
+	}
+}
+
+class Button extends Component{
+	constructor(width,height,label){
+		super(width,height);
+		this.label = label || "button";
+		this.$ele = $("<button>").text(this.label);
+	}
+
+	render($where){
+		super($where);
+		this.$ele.click(this.onClick.bind(this))
+	}
+
+	onClick(){
+		alert("hello oop!")
+	}
+}
+</script>
+</html>

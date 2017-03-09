@@ -1,0 +1,24 @@
+## About
+
+该项目是一个资料整理项目。
+里面包含了对React全栈知识的学习笔记和资料收集。
+
+## Item
+
+1. react
+2. less
+3. javascript 原生
+4. ES6
+5. react-router
+6. webpack
+7. react-redux
+8. nodejs
+9. webpack-router-redux-react 框架搭建
+10. ...不断补充中
+
+
+## Author
+@波比小金刚，@陈帅
+
+
+> 如要转载，注明出处。
